@@ -1,0 +1,48 @@
+﻿@page "/customers"
+
+@using HelloBlazor.Data
+@using HelloBlazor.Models
+@inject HttpClient Http
+
+<h3>All Customers</h3>
+
+@if (customers == null)
+{
+    <p><em>No customers</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Mobile</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.Name</td>
+                    <td>@customer.Address</td>
+                    <td>@customer.Mobile</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+
+    private IEnumerable<HelloBlazor.Models.Customer> customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await Http.GetJsonAsync<IEnumerable<HelloBlazor.Models.Customer>>("/api/Customer/GetAllCustomers");
+    }
+
+}
