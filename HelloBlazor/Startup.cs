@@ -12,6 +12,8 @@ using HelloBlazor.Data;
 using HelloBlazor.Services;
 using System.Net.Http;
 using Microsoft.AspNetCore.ResponseCompression;
+using HelloBlazor.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloBlazor
 {
@@ -48,6 +50,11 @@ namespace HelloBlazor
                     };
                 });
             }
+
+            services.AddDbContext<BlazorDbContext>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
