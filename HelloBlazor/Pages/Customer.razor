@@ -2,7 +2,7 @@
 
 @using HelloBlazor.Data
 @using HelloBlazor.Models
-
+@inject IJSRuntime JSRunTime
 @inject HttpClient Http
 
 <h3>Customer Dashboard</h3>
@@ -91,5 +91,16 @@
     private async Task SaveCustomer()
     {
         var result = await Http.PostJsonAsync<bool>("/api/Customer/SaveCustomer", customer);
+
+
+        if (result)
+        {
+            await JSRunTime.InvokeVoidAsync("CustomerSaveAlert");
+            await OnInitializedAsync();
+        }
+        else
+        {
+            await JSRunTime.InvokeVoidAsync("ErrorAlert");
+        }
     }
 }
