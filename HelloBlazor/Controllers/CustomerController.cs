@@ -26,5 +26,12 @@ namespace HelloBlazor.Controllers
         {
             return await customerService.GetAllCustomers();
         }
+
+        [HttpPost]
+        [Route("SaveCustomer")]
+        public async Task<bool> SaveCustomer(Customer customer)
+        {
+            return await customerService.SaveCustomer(customer);
+        }
     }
 }

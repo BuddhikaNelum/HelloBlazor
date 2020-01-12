@@ -9,5 +9,7 @@ namespace HelloBlazor.Services
     public interface ICustomerService
     {
         Task<IEnumerable<Customer>> GetAllCustomers();
+
+        Task<bool> SaveCustomer(Customer customer);
     }
 }

@@ -28,5 +28,25 @@ namespace HelloBlazor.Services
 				throw ex;
 			}
         }
-    }
+
+		public async Task<bool> SaveCustomer(Customer customer)
+		{
+			try
+			{
+				await blazorDbContext.Customers.AddAsync(customer);
+				
+				if (await blazorDbContext.SaveChangesAsync() > 0)
+				{
+					return true;
+				}
+
+				return false;
+			}
+			catch (Exception ex)
+			{
+
+				throw ex;
+			}
+		}
+	}
 }

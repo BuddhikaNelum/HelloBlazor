@@ -2,47 +2,94 @@
 
 @using HelloBlazor.Data
 @using HelloBlazor.Models
+
 @inject HttpClient Http
 
-<h3>All Customers</h3>
+<h3>Customer Dashboard</h3>
 
-@if (customers == null)
-{
-    <p><em>No customers</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Mobile</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var customer in customers)
-            {
+<div class="col-12">
+    <EditForm Model="@customer" OnValidSubmit="@SaveCustomer">
+
+        <div class="col-12 row">
+            <label class="col-2 font-weight-bold">Name</label>
+            <InputText class="form-control col-3" @bind-Value="customer.Name" placeholder="Name" />
+        </div>
+
+        <br />
+
+        <div class="col-12 row">
+            <label class="col-2 font-weight-bold">Address</label>
+            <InputText class="form-control col-3" @bind-Value="customer.Address" placeholder="Address" />
+        </div>
+
+        <br />
+
+        <div class="col-12 row">
+            <label class="col-2 font-weight-bold">Mobile</label>
+            <InputText class="form-control col-3" @bind-Value="customer.Mobile" placeholder="Mobile" />
+        </div>
+
+        <br />
+
+        <div class="col-12 row">
+            <span class="col-2"></span>
+            <input type="submit" class="form-control col-1 btn btn-primary" value="Save" />
+            <span>&nbsp;</span>
+            <input type="submit" class="form-control col-1 btn btn-primary" value="Clear" />
+        </div>
+
+        <br />
+
+    </EditForm>
+</div>
+
+<div class="col-10">
+    @if (customers == null)
+    {
+        <p><em>No customers</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@customer.Id</td>
-                    <td>@customer.Name</td>
-                    <td>@customer.Address</td>
-                    <td>@customer.Mobile</td>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Mobile</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var customer in customers)
+                {
+                    <tr>
+                        <td>@customer.Id</td>
+                        <td>@customer.Name</td>
+                        <td>@customer.Address</td>
+                        <td>@customer.Mobile</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 
 
 @code {
+
+    public HelloBlazor.Models.Customer customer { get; set; }
 
     private IEnumerable<HelloBlazor.Models.Customer> customers;
 
     protected override async Task OnInitializedAsync()
     {
+        customer = new HelloBlazor.Models.Customer();
+
         customers = await Http.GetJsonAsync<IEnumerable<HelloBlazor.Models.Customer>>("/api/Customer/GetAllCustomers");
     }
 
+    private async Task SaveCustomer()
+    {
+        var result = await Http.PostJsonAsync<bool>("/api/Customer/SaveCustomer", customer);
+    }
 }
