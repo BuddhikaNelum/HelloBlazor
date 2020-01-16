@@ -14,6 +14,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using HelloBlazor.DataContext;
 using Microsoft.EntityFrameworkCore;
+using HelloBlazor.Models;
 
 namespace HelloBlazor
 {
@@ -61,6 +62,7 @@ namespace HelloBlazor
             services.AddSingleton<WeatherForecastService>();
 
             services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IRepository<Customer>, Repository<Customer>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

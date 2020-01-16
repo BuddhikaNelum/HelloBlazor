@@ -10,17 +10,17 @@ namespace HelloBlazor.Services
 {
     public class CustomerService : ICustomerService
     {
-		private readonly BlazorDbContext blazorDbContext;
+		private readonly IRepository<Customer> repository;
 
-		public CustomerService(BlazorDbContext blazorDbContext)
+		public CustomerService(BlazorDbContext blazorDbContext, IRepository<Customer> repository)
 		{
-			this.blazorDbContext = blazorDbContext;
+			this.repository = repository;
 		}
         public async Task<IEnumerable<Customer>> GetAllCustomers()
         {
 			try
 			{
-				return await blazorDbContext.Customers.ToListAsync();
+				return await repository.GetAllAsync();
 			}
 			catch (Exception ex)
 			{
@@ -33,14 +33,7 @@ namespace HelloBlazor.Services
 		{
 			try
 			{
-				await blazorDbContext.Customers.AddAsync(customer);
-				
-				if (await blazorDbContext.SaveChangesAsync() > 0)
-				{
-					return true;
-				}
-
-				return false;
+				return await repository.AddAsync(customer);
 			}
 			catch (Exception ex)
 			{
